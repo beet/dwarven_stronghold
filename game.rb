@@ -7,6 +7,7 @@ require_relative "wall"
 require_relative "map"
 require_relative "stats"
 require_relative "screen"
+require_relative "directions"
 
 class Game
   require "tty-reader"
@@ -18,7 +19,7 @@ class Game
     d: :right,
   }
 
-  attr_reader :map, :stats, :screen, :player, :treasure, :keyboard_input
+  attr_reader :map, :stats, :screen, :player, :treasure, :keyboard_input, :directions
 
   def initialize(coordinates)
     @map = Map.new(coordinates)
@@ -34,6 +35,8 @@ class Game
     @keyboard_input = TTY::Reader.new
 
     register_key_events
+
+    @directions = Directions.new(map: map, player: player)
   end
 
   def play
@@ -63,6 +66,10 @@ class Game
       if %w(w a s d).include?(event.value)
         move_player(KEYBOARD_DIRECTION_MAPPINGS[event.value.to_sym])
       end
+
+      if event.value == "m"
+        show_map
+      end
     end
 
     keyboard_input.on(:keyctrl_x, :keyescape) do
@@ -78,7 +85,9 @@ class Game
       refresh_screen
 
       if stats.found_treasure?
-        puts "YAY! You found the treasure in #{stats.moves} moves!"
+            show_map
+
+        puts "\nYAY! You found the treasure in #{stats.moves} moves!"
 
         exit
       end
@@ -86,9 +95,15 @@ class Game
   end
 
   def refresh_screen
-    screen.render_map(map.render)
+    screen.render_map(directions.render)
 
     screen.render_stats(stats.render)
+
+    screen.refresh
+  end
+
+  def show_map
+    screen.render_map(map.render)
 
     screen.refresh
   end

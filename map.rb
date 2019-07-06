@@ -51,6 +51,12 @@ class Map
     object.move_right unless is_wall?(object.right)
   end
 
+  def is_wall?(point)
+    objects.any? do |object|
+      object == point && object.is_wall?
+    end
+  end
+
   private
 
   def width
@@ -66,12 +72,6 @@ class Map
       coordinates[y].each do |x|
         objects << Wall.new(x: x, y: y + 1)
       end
-    end
-  end
-
-  def is_wall?(point)
-    objects.any? do |object|
-      object == point && object.is_wall?
     end
   end
 

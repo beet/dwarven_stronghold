@@ -17,6 +17,7 @@ class Screen
     print stats_box
 
     puts "\nUp: W, Down: S, Left: A, Right D"
+    puts "\nShow map: M"
     puts "\nExit: CTRL+X or Escape"
   end
 
