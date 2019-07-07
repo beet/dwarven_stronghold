@@ -18,7 +18,7 @@ class Game
     d: :right,
   }
 
-  attr_reader :map, :stats, :screen, :player, :treasure, :keyboard_input, :directions
+  attr_reader :map, :stats, :screen, :player, :treasure, :keyboard_input, :directions, :monsters, :items
 
   def initialize(coordinates)
     @map = Map.new(coordinates)
@@ -28,6 +28,10 @@ class Game
     initialise_player
 
     initialise_treasure
+
+    initialise_monsters
+
+    initialise_items
 
     @stats = Stats.new(map: map, player: player, treasure: treasure)
 
@@ -60,6 +64,30 @@ class Game
     map.place_oject_randomly(treasure)
   end
 
+  def initialise_monsters
+    @monsters = []
+
+    5.times do
+      monster = WorldObjects::Creatures::Monster.new
+
+      monsters << monster
+
+      map.place_oject_randomly(monster)
+    end
+  end
+
+  def initialise_items
+    @items = []
+
+    3.times do
+      item = WorldObjects::Items::Item.new
+
+      items << item
+
+      map.place_oject_randomly(item)
+    end
+  end
+
   def register_key_events
     keyboard_input.on(:keypress) do |event|
       if %w(w a s d).include?(event.value)
@@ -81,6 +109,8 @@ class Game
     if map.send("move_object_#{direction.to_s}", player)
       stats.move
 
+      move_monsters
+
       refresh_screen
 
       if stats.found_treasure?
@@ -90,6 +120,12 @@ class Game
 
         exit
       end
+    end
+  end
+
+  def move_monsters
+    monsters.each do |monster|
+      map.send("move_object_#{KEYBOARD_DIRECTION_MAPPINGS.values.sample}", monster)
     end
   end
 
