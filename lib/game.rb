@@ -1,6 +1,6 @@
 require "rubygems"
 
-Dir["lib/**/*.rb"].each do |file|
+Dir["#{__dir__}/**/*.rb"].each do |file|
   require_relative file
 end
 
