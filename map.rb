@@ -10,10 +10,10 @@ class Map
   end
 
   def place_oject_randomly(object)
-    while is_wall?(object)
-      object.x = 1 + rand(width - 1)
+    while is_wall?(object.location)
+      object.location_x = 1 + rand(width - 1)
 
-      object.y = 1 + rand(height - 1)
+      object.location_y = 1 + rand(height - 1)
     end
 
     objects << object
@@ -23,9 +23,7 @@ class Map
     "".tap do |output|
       (1..height).each do |y|
         (1..width).each do |x|
-          point = Point.new(x: x, y: y)
-
-          object = object_at(point)
+          object = object_at(Locatable::Point.new(x: x, y: y))
 
           output << (object.nil? ? "  " : object.sprite)
         end
@@ -36,24 +34,24 @@ class Map
   end
 
   def move_object_up(object)
-    object.move_up unless is_wall?(object.up)
+    object.location_move_up unless is_wall?(object.location_up)
   end
 
   def move_object_down(object)
-    object.move_down unless is_wall?(object.down)
+    object.location_move_down unless is_wall?(object.location_down)
   end
 
   def move_object_left(object)
-    object.move_left unless is_wall?(object.left)
+    object.location_move_left unless is_wall?(object.location_left)
   end
 
   def move_object_right(object)
-    object.move_right unless is_wall?(object.right)
+    object.location_move_right unless is_wall?(object.location_right)
   end
 
   def is_wall?(point)
     objects.any? do |object|
-      object == point && object.is_wall?
+      object.location == point && object.is_wall?
     end
   end
 
@@ -70,14 +68,20 @@ class Map
   def populate_walls
     coordinates.each_index do |y|
       coordinates[y].each do |x|
-        objects << Wall.new(x: x, y: y + 1)
+        wall = WorldObjects::Structures::Wall.new
+
+        wall.location_x = x
+
+        wall.location_y = y + 1
+
+        objects << wall
       end
     end
   end
 
   def object_at(point)
     objects.detect do |object|
-      object == point
+      object.location == point
     end
   end
 end

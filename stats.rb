@@ -27,6 +27,6 @@ class Stats
   private
 
   def treasure_distance
-    player.distance(treasure)
+    player.location_distance(treasure.location)
   end
 end

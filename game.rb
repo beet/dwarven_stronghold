@@ -1,13 +1,12 @@
 require "rubygems"
-require "forwardable"
-require_relative "point"
-require_relative "player"
-require_relative "treasure"
-require_relative "wall"
 require_relative "map"
 require_relative "stats"
 require_relative "screen"
 require_relative "directions"
+
+Dir["lib/**/*.rb"].each do |file|
+  require_relative file
+end
 
 class Game
   require "tty-reader"
@@ -50,13 +49,13 @@ class Game
   private
 
   def initialise_player
-    @player = Player.new(x: 1, y: 1)
+    @player = WorldObjects::Creatures::Human.new
 
     map.place_oject_randomly(player)
   end
 
   def initialise_treasure
-    @treasure = Treasure.new(x: 1, y: 1)
+    @treasure = WorldObjects::Items::Treasure.new
 
     map.place_oject_randomly(treasure)
   end

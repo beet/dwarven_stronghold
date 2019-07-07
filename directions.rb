@@ -17,19 +17,19 @@ class Directions
   private
 
   def north
-    player.up
+    player.location_up
   end
 
   def south
-    player.down
+    player.location_down
   end
 
   def east
-    player.right
+    player.location_right
   end
 
   def west
-    player.left
+    player.location_left
   end
 
   def view(position)
