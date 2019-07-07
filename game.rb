@@ -1,8 +1,4 @@
 require "rubygems"
-require_relative "map"
-require_relative "stats"
-require_relative "screen"
-require_relative "directions"
 
 Dir["lib/**/*.rb"].each do |file|
   require_relative file
