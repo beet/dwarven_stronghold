@@ -1,3 +1,20 @@
+=begin
+
+The Locatable module can be used to compose objects that have a location and
+various associated methods related to the location's X/Y coordinates.
+
+It uses the Comparable module to allow comparisons between two locatable objects' locations:
+
+    object1.location == object2.location
+    => false
+
+    object1.location > object2.location
+    => true
+
+    object1.location_distance(object2.location)
+    => 123
+
+=end
 module Locatable
   class Point
     include Comparable
@@ -68,6 +85,8 @@ module Locatable
         @location ||= Point.new(x: 1, y: 1)
       end
 
+      # Delegate all of the Point object's instance methods with the prefix
+      # "location_", such as location_x, location_y, location_up, etc.
       (Locatable::Point.instance_methods - Object.methods).each do |method|
         define_method("location_#{method}".to_sym) do |*args, &block|
           location.send(method, *args)

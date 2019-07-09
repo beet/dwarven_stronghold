@@ -1,3 +1,18 @@
+=begin
+
+The Directions object uses the map and player objects to render text
+directions of what the player can see.
+
+  directions = Directions.new(map: map, player: payer)
+
+  directions.render
+
+  "North: Open
+  South: Open
+  East: Wall
+  West: Wall"
+
+=end
 class Directions
   attr_reader :map, :player
 

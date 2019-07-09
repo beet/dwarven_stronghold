@@ -1,5 +1,17 @@
 require_relative "../locatable"
 
+=begin
+
+WorldObjects are composed with the Locatable module that provdides them with
+location functionality.
+
+They also have a "sprite", which is a text string used to render them in the
+map".
+
+You can call any predicate method on any world object that is prefixed with
+"is_", like "is_wall?" without having to define it, and it will return false.
+
+=end
 module WorldObjects
   class Base
     include Locatable

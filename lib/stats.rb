@@ -1,3 +1,10 @@
+=begin
+
+The Stats object keeps track of statistics like how many moves the player has
+made, how far away the treasure is, and whether the player has found the
+treasure.
+
+=end
 class Stats
   attr_reader :map, :player, :treasure, :moves
 

@@ -4,6 +4,13 @@ Dir["#{__dir__}/**/*.rb"].each do |file|
   require_relative file
 end
 
+=begin
+
+The Game object loads and initialises the various other game objects and uses
+tty-reader to connect key-press events to functions that control gameplay,
+like moving the player around the map and refreshing the screen.
+
+=end
 class Game
   require "tty-reader"
 

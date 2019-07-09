@@ -1,3 +1,9 @@
+=begin
+
+The Screen object uses tty-box to render screen components like the map and
+stats panes.
+
+=end
 class Screen
   require "tty-box"
 
