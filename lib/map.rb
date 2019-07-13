@@ -86,6 +86,14 @@ class Map
     end
   end
 
+  def objects_at_player_location
+    objects_at(player_location).reject(&:is_player?)
+  end
+
+  def object_at(point)
+    objects_at(point).first
+  end
+
   private
 
   def width
@@ -112,9 +120,17 @@ class Map
     end
   end
 
-  def object_at(point)
-    objects.detect do |object|
+  def objects_at(point)
+    objects.select do |object|
       object.location == point
     end
+  end
+
+  def player
+    @player ||= objects.detect(&:is_player?)
+  end
+
+  def player_location
+    player.location
   end
 end
