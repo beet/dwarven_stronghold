@@ -1,3 +1,5 @@
+require_relative "base"
+
 module WorldObjects
   module Creatures
     class Human < WorldObjects::Creatures::Base

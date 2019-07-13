@@ -56,7 +56,7 @@ class Game
   private
 
   def initialise_player
-    @player = WorldObjects::Creatures::Human.new
+    @player = WorldObjects::Player.new
 
     map.place_oject_randomly(player)
   end
