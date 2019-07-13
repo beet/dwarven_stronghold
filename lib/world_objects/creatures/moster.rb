@@ -4,6 +4,12 @@ module WorldObjects
       def sprite
         "XX"
       end
+
+      private
+
+      def species
+        "monster"
+      end
     end
   end
 end

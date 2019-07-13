@@ -4,6 +4,10 @@ module WorldObjects
       def sprite
         "  "
       end
+
+      def description
+        "treasure"
+      end
     end
   end
 end

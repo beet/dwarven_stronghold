@@ -4,6 +4,10 @@ module WorldObjects
       def sprite
         "**"
       end
+
+      def description
+        "nondescript item"
+      end
     end
   end
 end

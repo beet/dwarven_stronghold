@@ -6,6 +6,12 @@ module WorldObjects
       def sprite
         "PP"
       end
+
+      private
+
+      def species
+        "human"
+      end
     end
   end
 end

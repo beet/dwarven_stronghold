@@ -20,6 +20,10 @@ module WorldObjects
       "  "
     end
 
+    def description
+      "object"
+    end
+
     # Rather than explicitly defining abstract methods for predicates like
     # is_wall?, all world objects will return false from any is_foo? method,
     # allowing only the specific world object to override their own methods to
