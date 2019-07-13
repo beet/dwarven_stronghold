@@ -47,7 +47,13 @@ class Directions
     player.location_left
   end
 
+  class NullObject
+    def description
+      "open"
+    end
+  end
+
   def view(position)
-    map.is_wall?(position) ? "Wall" : "Open"
+    (map.object_at(position) || NullObject.new).description
   end
 end
