@@ -47,13 +47,10 @@ class Directions
     player.location_left
   end
 
-  class NullObject
-    def description
-      "open"
-    end
-  end
-
   def view(position)
-    (map.object_at(position) || NullObject.new).description
+    map.objects_at(position)
+      .collect(&:description)
+      .join(", ")
+      .tap { |description| description << "open" if description == "" }
   end
 end

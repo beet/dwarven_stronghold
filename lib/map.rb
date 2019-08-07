@@ -17,7 +17,8 @@ Would produce a map that looks like:
     ###
 
 It can place objects randomly within the map, move them around the map, and
-tell you whether a given point is a wall or not.
+provide an array of other objects at the player's location or another location
+in the map.
 
 =end
 class Map
@@ -48,7 +49,7 @@ class Map
     "".tap do |output|
       (1..height).each do |y|
         (1..width).each do |x|
-          object = object_at(Locatable::Point.new(x: x, y: y))
+          object = objects_at(Locatable::Point.new(x: x, y: y)).first
 
           output << (object.nil? ? "  " : object.sprite)
         end
@@ -78,20 +79,14 @@ class Map
     object.location_move_right unless is_wall?(object.location_right)
   end
 
-  # Geven a Locatable object, returns true if its location coresponds to a
-  # wall in the map
-  def is_wall?(point)
-    objects.any? do |object|
-      object.location == point && object.is_wall?
-    end
-  end
-
   def objects_at_player_location
     objects_at(player_location).reject(&:is_player?)
   end
 
-  def object_at(point)
-    objects_at(point).first
+  def objects_at(point)
+    objects.select do |object|
+      object.location == point
+    end
   end
 
   private
@@ -120,9 +115,11 @@ class Map
     end
   end
 
-  def objects_at(point)
-    objects.select do |object|
-      object.location == point
+  # Geven a Locatable object, returns true if its location coresponds to a
+  # wall in the map
+  def is_wall?(point)
+    objects.any? do |object|
+      object.location == point && object.is_wall?
     end
   end
 
