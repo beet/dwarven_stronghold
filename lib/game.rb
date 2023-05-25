@@ -13,6 +13,8 @@ like moving the player around the map and refreshing the screen.
 =end
 class Game
   require "tty-reader"
+  require "tty-cursor"
+  require "faker"
 
   KEYBOARD_DIRECTION_MAPPINGS = {
     w: :up,
@@ -21,7 +23,7 @@ class Game
     d: :right,
   }
 
-  attr_reader :map, :stats, :screen, :player, :treasure, :keyboard_input, :directions, :monsters, :items
+  attr_reader :map, :stats, :screen, :player, :treasure, :keyboard_input, :directions, :monsters, :items, :cursor
 
   def initialize(coordinates)
     @map = Map.new(coordinates)
@@ -39,6 +41,8 @@ class Game
     @stats = Stats.new(map: map, player: player, treasure: treasure)
 
     @keyboard_input = TTY::Reader.new
+    @cursor = TTY::Cursor
+    cursor.hide
 
     register_key_events
 
@@ -47,6 +51,13 @@ class Game
 
   def play
     refresh_screen
+
+    show_map
+    monsters.each { |monster| render_object(monster) }
+    items.each { |item| render_object(item) }
+    render_object(player)
+    cursor.hide
+    print cursor.move_to(0, 0)
 
     loop do
       keyboard_input.read_line(echo: false)
@@ -82,7 +93,7 @@ class Game
   def initialise_items
     @items = []
 
-    3.times do
+    5.times do
       item = WorldObjects::Items::Item.new
 
       items << item
@@ -109,21 +120,31 @@ class Game
   end
 
   def move_player(direction)
+    clear_cursor_at(player)
+
     if map.send("move_object_#{direction.to_s}", player)
       stats.move
 
-      move_monsters
-
       refresh_screen
 
+      monsters.each { |monster| clear_cursor_at(monster) }
+      move_monsters
+      monsters.each { |monster| render_object(monster) }
+
       if stats.found_treasure?
-            show_map
+        # show_map
 
         puts "\nYAY! You found the treasure in #{stats.moves} moves!"
 
         exit
       end
     end
+
+    items.each { |item| render_object(item) }
+
+    render_object(player)
+    cursor.hide
+    print cursor.move_to(0, 0)
   end
 
   def move_monsters
@@ -133,7 +154,8 @@ class Game
   end
 
   def refresh_screen
-    screen.render_map(directions.render)
+    # screen.render_map(directions.render)
+    # screen.render_map(map.render)
 
     screen.render_stats(stats.render)
 
@@ -144,5 +166,22 @@ class Game
     screen.render_map(map.render)
 
     screen.refresh
+  end
+
+  def clear_cursor_at(object)
+    move_cursor_to(object)
+
+    # print "  "
+    cursor.clear_char(2)
+  end
+
+  def render_object(object)
+    move_cursor_to(object)
+    
+    print object.sprite
+  end
+
+  def move_cursor_to(object)
+    print cursor.move_to(object.location_x * 2 - 1, object.location_y)
   end
 end

@@ -51,7 +51,12 @@ class Map
         (1..width).each do |x|
           object = objects_at(Locatable::Point.new(x: x, y: y)).first
 
-          output << (object.nil? ? "  " : object.sprite)
+          # output << (object.nil? ? "  " : object.sprite)
+          if object.nil?
+            output << "  "
+          else
+            output << (object.is_wall? ? object.sprite : "  ")
+          end
         end
 
         output << "\n"

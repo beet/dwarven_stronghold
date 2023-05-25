@@ -6,7 +6,7 @@ module WorldObjects
       end
 
       def description
-        "treasure"
+        "treasure chest"
       end
     end
   end
