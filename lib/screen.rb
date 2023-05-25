@@ -3,6 +3,8 @@
 The Screen object uses tty-box to render screen components like the map and
 stats panes.
 
+Hmmm... [Ruby 2D](https://www.ruby2d.com/)
+
 =end
 class Screen
   require "tty-box"
@@ -11,7 +13,6 @@ class Screen
 
   def initialize
     @map_box = nil
-
     @stats_box = nil
   end
 
@@ -22,17 +23,15 @@ class Screen
 
     print stats_box
 
-    puts "\nUp: W, Down: S, Left: A, Right D"
-    puts "\nShow map: M"
-    puts "\nExit: CTRL+X or Escape"
+    puts controls_box
   end
 
   def render_map(map)
     @map_box = TTY::Box.frame(
       top: 0,
       left: 0,
-      width: 32,
-      height: 17,
+      width: 62,
+      height: 32,
       title: { top_left: "Map" }
     ) do
       map
@@ -42,12 +41,30 @@ class Screen
   def render_stats(stats)
     @stats_box = TTY::Box.frame(
       top: 0,
-      left: 33,
+      left: 63,
       width: 32,
       height: 17,
       title: { top_left: "Stats" }
     ) do
       stats
+    end
+  end
+
+  private
+
+  def controls_box
+    @controls_box ||= TTY::Box.frame(
+      top: 32,
+      left: 0,
+      width: 94,
+      height: 5,
+      title: { top_left: "Controls" }
+    ) do
+      [
+        "Up: W, Down: S, Left: A, Right D",
+        "Show map: M",
+        "Exit: CTRL+X or Escape",
+      ].join("\n")
     end
   end
 end

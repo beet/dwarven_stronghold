@@ -16,12 +16,18 @@ module WorldObjects
   class Base
     include Locatable
 
+    attr_reader :name
+
+    def initialize(name: nil)
+      @name = name
+    end
+
     def sprite
       "  "
     end
 
     def description
-      "object"
+      name || "object"
     end
 
     # Rather than explicitly defining abstract methods for predicates like

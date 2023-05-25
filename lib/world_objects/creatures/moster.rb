@@ -1,14 +1,16 @@
 module WorldObjects
   module Creatures
     class Monster < WorldObjects::Creatures::Base
+      EMOJIS = %w(😈 👿 👹 👺 👾 👽)
+
       def sprite
-        "XX"
+        @sprite ||= EMOJIS.sample
       end
 
       private
 
       def species
-        "monster"
+        @species ||= Faker::Games::DnD.monster
       end
     end
   end
